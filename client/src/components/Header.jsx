@@ -11,7 +11,7 @@ const Header = () => {
                 <span className=' text-slate-900'>Estate</span>
             </h1>
             <form action="" className=' flex items-center bg-white p-2 rounded-lg'>
-              <input type="text" placeholder='Search...' className=' w-36 sm:w-52 rounded-lg bg-transparent' />
+              <input type="text" placeholder='Search...' className=' w-36 sm:w-52 rounded-lg bg-transparent outline-none' />
               <IoSearch />
             </form>
             <ul className=' flex gap-5 text-sm font-semibold'>
