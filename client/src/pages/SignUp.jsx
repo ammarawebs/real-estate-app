@@ -69,7 +69,7 @@ const SignUp = () => {
     <div className=' mx-auto max-w-lg p-9'>
       {error && <p className=' text-red-500 font-medium' >{error}</p> }
       {success ?  <p className=' text-green-500 font-medium'>User Created Successfully <br/> Navigating to Sign in page...</p> : <p></p>}
-      <h1 className=' font-semibold text-center my-9 text-3xl' >Sign Up </h1>
+      <h1 className=' font-bold text-center my-9 text-3xl' >Sign Up </h1>
       <form autoComplete='off' onSubmit={handleSubmit} action="" className='flex flex-col gap-5'>
         <input type="text" name="username" id="username" placeholder='username' className=' border p-2 rounded-lg  outline-slate-300' onChange={handleChange} required autoComplete='off'/>
         <input type="email" name="email" id="email" placeholder='email' className=' border p-2 rounded-lg  outline-slate-300' onChange={handleChange} required autoComplete='off' />
