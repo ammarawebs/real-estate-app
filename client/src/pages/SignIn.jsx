@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector  } from 'react-redux'
 import { signInStart , signInSuccess , signInFailure } from '../redux/user/user.slice.js'
+import OAuth from '../components/OAuth.jsx'
 
 
 
@@ -82,6 +83,7 @@ const SignIn = () => {
         <button disabled={loading} className=' bg-slate-800 text-white p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium '>
           {loading ? 'Loading...' : 'Sign In'}
           </button>
+          <OAuth/>
       </form>
       <div className='flex flex-col gap-3 py-4'>
         <div className=' flex gap-3'>
