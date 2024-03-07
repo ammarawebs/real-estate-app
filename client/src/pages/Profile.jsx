@@ -1,34 +1,133 @@
-import React from 'react'
+import React, { useEffect , useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useRef } from 'react'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { app } from '../firebase'
+
+
 
 const Profile = () => {
-  const currentUser = useSelector((state=>state.user))
-  return (
-    <div className=' flex justify-center items-center w-full '>
-      <div className=' flex flex-col justify-center items-center w-4/5 pt-20 pb-20'>
-        <h1 className=' font-bold text-3xl'>Profile</h1>
-        <img className=' pt-9 rounded-full w-20 cursor-pointer object-cover' src={currentUser.currentUser.avatar} alt='user Profile'/>
+  const fileRef = useRef();
+  const currentUser = useSelector((state) => state.user);
+  const [file, setFile] = useState(undefined);
+  const [filePercentage, setFilePercentage] = useState(0);
+  const [fileError, SetFileError] = useState(false);
+  const [formData, setFormData] = useState({});
+  console.log(file);
+  console.log(filePercentage);
+  console.log(fileError);
+  console.log(formData);
 
-        <form autoComplete='off'  action="" className='flex flex-col gap-5 pt-9 w-full sm:max-w-lg  '>
-        <input type="text" name="username" id="username" placeholder='username' className=' border p-2 rounded-lg  outline-slate-300 '  required autoComplete='off'/>
-        <input type="email" name="email" id="email" placeholder='email' className=' border p-2 rounded-lg  outline-slate-300'  required autoComplete='off' />
-        <input type="password" name="password" id="password" placeholder='password' className=' border p-2 rounded-lg  outline-slate-300'  required autoComplete='off'/>
-        <button  className=' bg-slate-700 text-white p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium '>
-          Update
+  useEffect(() => {
+    if (file) {
+      handleFileUpload(file);
+    }
+  }, [file]);
+
+  const handleFileUpload = (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setFilePercentage(progress);
+      },
+      (error) => {
+        SetFileError(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          setFormData({ ...formData, avatar: url });
+        });
+      }
+    );
+  };
+
+  return (
+    <div className=" flex justify-center items-center w-full ">
+      <div className=" flex flex-col justify-center items-center w-4/5 pt-20 pb-20">
+        <h1 className=" font-bold text-3xl">Profile</h1>
+        <input
+          type="file"
+          ref={fileRef}
+          hidden
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
+        <img
+          onClick={() => {
+            fileRef.current.click();
+          }}
+          className=" my-7  object-cover  rounded-full w-24 h-24 cursor-pointer "
+          src={ formData.avatar || currentUser.currentUser.avatar}
+          alt="user Profile"
+        />
+
+        {fileError ? (
+          <span className=" font-semibold text-red-700 ">File Upload Error</span>
+        ) : filePercentage > 0 && filePercentage < 100 ? (
+          <span className=" font-semibold text-blue-700 ">{`Uploading ${filePercentage}%`}</span>
+        ) : filePercentage == 100 ? (
+          <span className="font-semibold text-green-700 ">
+            File Uploaded Successfully
+          </span>
+        ) : null}
+
+        <form
+          autoComplete="off"
+          action=""
+          className="flex flex-col gap-5 pt-9 w-full sm:max-w-lg  "
+        >
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="username"
+            className=" border p-2 rounded-lg  outline-slate-300 "
+            required
+            autoComplete="off"
+          />
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="email"
+            className=" border p-2 rounded-lg  outline-slate-300"
+            required
+            autoComplete="off"
+          />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="password"
+            className=" border p-2 rounded-lg  outline-slate-300"
+            required
+            autoComplete="off"
+          />
+          <button className=" bg-slate-700 text-white p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium ">
+            Update
           </button>
-          <button  className=' bg-green-700 text-white p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium '>
-          Create Listing 
+          <button className=" bg-green-700 text-white p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium ">
+            Create Listing
           </button>
-        <div className='flex justify-between text-red-600 font-semibold'>
-          <span>Delete Account</span>
-          <span>Sign Out</span>
-        </div>
-        <span className=' text-center text-green-600 font-semibold'>Show Listings</span>
-      </form>
+          <div className="flex justify-between text-red-600 font-semibold">
+            <span>Delete Account</span>
+            <span>Sign Out</span>
+          </div>
+          <span className=" text-center text-green-700 font-semibold">
+            Show Listings
+          </span>
+        </form>
       </div>
-      
     </div>
-  )
-}
+  );
+};
 
 export default Profile
