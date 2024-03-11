@@ -73,9 +73,10 @@ const SignIn = () => {
 
   return (
     <div className=' mx-auto max-w-lg p-9'>
-      {error && <p className=' text-red-500 font-medium' >{error}</p> }
-      {success ?  <p className=' text-green-500 font-medium'>User Signed in Successfully <br/> Navigating to Home page...</p> : <p></p>}
+      
       <h1 className=' font-semibold text-center my-9 text-3xl' >Sign In </h1>
+      {error && <p className=' text-red-500 font-medium text-center my-5' >{error}</p> }
+      {success ?  <p className=' text-green-500 font-medium text-center my-5'>User Signed in Successfully <br/> Navigating to Home page...</p> : <p></p>}
       <form autoComplete='off' onSubmit={handleSubmit} action="" className='flex flex-col gap-5'>
         
         <input type="email" name="email" id="email" placeholder='email' className=' border p-2 rounded-lg  outline-slate-300' onChange={handleChange} required autoComplete='off' />
