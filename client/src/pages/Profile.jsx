@@ -5,6 +5,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { updateUserStart , updateUserSuccess , updateUserFailure , deleteUserFailure, deleteUserStart,deleteUserSuccess, signOutUserStart, signOutUserFailure, signOutUserSuccess} from '../redux/user/user.slice'
 import { useDispatch } from 'react-redux'
 import { app } from '../firebase'
+import { useNavigate , Link } from'react-router-dom'
 
 
 
@@ -189,9 +190,9 @@ const Profile = () => {
           <button disabled={loading}  className=" bg-slate-700 text-white p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium ">
             {loading ? 'Loading...' : 'Update'}
           </button>
-          <button className=" bg-green-700 text-white p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium ">
+          <Link to={'/create-listing'} className=" bg-green-700 text-white text-center p-2 rounded-lg hover:opacity-90 disabled:opacity-70 uppercase font-medium ">
             Create Listing
-          </button>
+          </Link>
           <div className="flex justify-between text-red-600 font-semibold">
             <span onClick={handleDeleteUser} className=' cursor-pointer'>Delete Account</span>
             <span onClick={handleSignOutUser} className=' cursor-pointer'>Sign Out</span>
