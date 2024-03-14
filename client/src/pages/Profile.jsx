@@ -6,6 +6,7 @@ import { updateUserStart , updateUserSuccess , updateUserFailure , deleteUserFai
 import { useDispatch } from 'react-redux'
 import { app } from '../firebase'
 import { useNavigate , Link } from'react-router-dom'
+import { set } from 'mongoose'
 
 
 
@@ -17,6 +18,8 @@ const Profile = () => {
   const [fileError, SetFileError] = useState(false);
   const [formData, setFormData] = useState({});
   const [success , setSuccess] = useState(false)
+  const [showListingError , setShowListingError] = useState(false)
+  const [userListings, setUserListings] = useState([])
   const dispatch = useDispatch();
  
   useEffect(() => {
@@ -116,6 +119,24 @@ const Profile = () => {
     }
   }
 
+  const handleShowListings = async () => {
+    
+    try {
+      const res = await fetch(`/api/user/listings/${currentUser._id}`)
+      const data = await res.json()
+      if(data.success === false){
+        setShowListingError(data.message)
+        return
+      }
+      setShowListingError(false)
+      setUserListings(data)
+     
+    } catch (error) {
+      setShowListingError(error)
+    }
+  }
+
+
   return (
     <div className=" flex justify-center items-center w-full ">
       <div className=" flex flex-col justify-center items-center w-4/5 pt-20 pb-20">
@@ -197,10 +218,40 @@ const Profile = () => {
             <span onClick={handleDeleteUser} className=' cursor-pointer'>Delete Account</span>
             <span onClick={handleSignOutUser} className=' cursor-pointer'>Sign Out</span>
           </div>
-          <span className=" text-center text-green-700 font-semibold">
+          <span onClick={handleShowListings} className=" text-center text-green-700 font-semibold cursor-pointer">
             Show Listings
           </span>
+          <p className=' text-red-500 , font-semibold'>{showListingError ? showListingError :  '' }</p>
+          
         </form>
+        {
+            userListings && userListings.map((listing) => {
+              return(
+              <div key={listing._id} className=' flex items-center gap-4 border border-gray-300 rounded-lg p-4 my-3 w-full sm:max-w-3xl shadow-md bg-slate-100' >
+                <div className='flex items-center gap-4 w-full'>
+                <Link className=' w-1/5 sm:w-1/5 h-10  sm:h-20' to={`/listing/${listing._id}`}>
+                  <img src={listing.imageUrls[0]} alt="listing Cover" className=' w-full h-full object-cover' />
+                </Link>
+                <Link className=' w-3/5 sm:w-3/5 border
+                ' to={`/listing/${listing._id}`}>
+                  <p className=' w-full font-semibold text-md hover:underline truncate'>{listing.name}</p>
+                </Link>
+                <div className='flex flex-col gap-2 w-1/5 sm:w-1/5'>
+                  <button className=' text-red-600 font-semibold hover:text-red-900'>
+                    Delete
+                  </button>
+                  <button className=' text-green-500 font-semibold hover:text-green-700'>
+                    Edit
+                  </button>
+                </div>
+                </div>
+                
+
+
+              </div>
+              )
+            })
+          }
       </div>
     </div>
   );
