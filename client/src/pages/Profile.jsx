@@ -19,6 +19,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const [success , setSuccess] = useState(false)
   const [showListingError , setShowListingError] = useState(false)
+  const [deleteListingError , setDeleteListingError] = useState(false)
   const [userListings, setUserListings] = useState([])
   const dispatch = useDispatch();
  
@@ -136,6 +137,29 @@ const Profile = () => {
     }
   }
 
+  const handleDeleteListing = async (id) => {
+    try {
+
+      const res = await fetch(`/api/listing/delete/${id}`, 
+      {
+        method: 'DELETE',
+      })
+      const data = await res.json()
+      if(data.success === false){
+        setDeleteListingError(data.message)
+        return
+      }
+      setDeleteListingError(false)
+      setUserListings((userListings) =>
+        userListings.filter((listing) => listing._id!== id))
+
+
+      
+    } catch (error) {
+      setDeleteListingError(error)
+    }
+  }
+
 
   return (
     <div className=" flex justify-center items-center w-full ">
@@ -224,6 +248,7 @@ const Profile = () => {
           <p className=' text-red-500 , font-semibold'>{showListingError ? showListingError :  '' }</p>
           
         </form>
+        {deleteListingError && <p className=' text-red-500 font-medium' >{deleteListingError}</p> }
         {
             userListings && userListings.map((listing) => {
               return(
@@ -232,12 +257,11 @@ const Profile = () => {
                 <Link className=' w-1/5 sm:w-1/5 h-10  sm:h-20' to={`/listing/${listing._id}`}>
                   <img src={listing.imageUrls[0]} alt="listing Cover" className=' w-full h-full object-cover' />
                 </Link>
-                <Link className=' w-3/5 sm:w-3/5 border
-                ' to={`/listing/${listing._id}`}>
+                <Link className=' w-3/5 sm:w-3/5 ' to={`/listing/${listing._id}`}>
                   <p className=' w-full font-semibold text-md hover:underline truncate'>{listing.name}</p>
                 </Link>
-                <div className='flex flex-col gap-2 w-1/5 sm:w-1/5'>
-                  <button className=' text-red-600 font-semibold hover:text-red-900'>
+                <div className='flex flex-col text-sm gap-2 w-1/5 sm:w-1/5'>
+                  <button onClick={()=>handleDeleteListing(listing._id)} className=' text-red-600 font-semibold hover:text-red-900'>
                     Delete
                   </button>
                   <button className=' text-green-500 font-semibold hover:text-green-700'>
