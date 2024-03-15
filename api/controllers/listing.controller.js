@@ -1,4 +1,5 @@
 import Listing from "../models/listing.model.js";
+import { errorHandler } from "../utils/error.js";
 
 
 
@@ -28,4 +29,17 @@ export const deleteListing = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+}
+
+export const updateListing = async (req, res, next) => {
+    try {
+        const listing = await Listing.findById(req.params.id);
+        if(!listing) return next(errorHandler(404, 'listing not found'));
+        if(listing.userRef!== req.user.id) return next(errorHandler(401, 'you can only update your listing'))
+        await Listing.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        return res.status(200).json('listing has been updated')
+    } catch (error) {
+        next(error)
+    }
+
 }
