@@ -260,13 +260,16 @@ const Profile = () => {
                 <Link className=' w-3/5 sm:w-3/5 ' to={`/listing/${listing._id}`}>
                   <p className=' w-full font-semibold text-md hover:underline truncate'>{listing.name}</p>
                 </Link>
-                <div className='flex flex-col text-sm gap-2 w-1/5 sm:w-1/5'>
+                <div className='flex flex-col items-center justify-center  text-sm gap-2 w-1/5 sm:w-1/5'>
                   <button onClick={()=>handleDeleteListing(listing._id)} className=' text-red-600 font-semibold hover:text-red-900'>
                     Delete
                   </button>
-                  <button className=' text-green-500 font-semibold hover:text-green-700'>
+                  <Link to={`/update-listing/${listing._id}`}>
+                  <button  className=' text-green-500 font-semibold hover:text-green-700'>
                     Edit
                   </button>
+                  </Link>
+                  
                 </div>
                 </div>
                 
