@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { IoSearch } from "react-icons/io5";
 import { useSelector } from 'react-redux';
+import { Navbar } from '@nextui-org/react';
 
 const Header = () => {
   const currentUser = useSelector((state=>state.user))
