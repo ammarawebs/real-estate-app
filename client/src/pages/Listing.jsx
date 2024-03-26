@@ -10,6 +10,8 @@ import { FaParking } from "react-icons/fa";
 import { FaChair } from "react-icons/fa";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; 
+import { Link } from "react-router-dom";
+
 
 import "swiper/css/bundle";
 import Gallery from "../components/Gallery";
@@ -22,10 +24,23 @@ const Listing = () => {
   const [listingError, setListingError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [owner , setOwner] = useState(null);
+  const [subject, setSubject ]= useState(null);
+  const [message, setMessage] = useState(null);
+  console.log(subject)
+  console.log(message)
   const scrollRef = useRef(null);
- 
 
-  console.log(listing);
+  console.log(owner)
+
+  const onChangeSubject = (e) => {
+    setSubject(e.target.value)
+  }
+
+  const onChangeMessage = (e) => {
+    setMessage(e.target.value)
+  }
+
    
 
   useEffect(() => {
@@ -43,13 +58,28 @@ const Listing = () => {
         setListingError(false);
         setListing(data);
         setLoading(false);
+        const getOwner = async () => {
+          try {
+            const res = await fetch(`/api/user/${data.userRef}`);
+            const data2 = await res.json();
+            setOwner(data2);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        getOwner();
       } catch (error) {
         setLoading(false);
         setListingError(error);
       }
     };
 
+    
+    
+
     getListing();
+
+    
   }, []);
 
 
@@ -84,7 +114,7 @@ const Listing = () => {
                   <FaLocationDot className=" text-green-200" />
                     {listing.address}
                   </h2>
-                  <h1 className=" w-full sm:w-3/5 text-2xl lg:w-2/5 sm:text-3xl lg:text-5xl font-bold text-white opacity-80 ">
+                  <h1 className=" w-full sm:w-3/5 text-2xl lg:w-2/5 sm:text-3xl lg:text-4xl font-bold text-white opacity-80 ">
                     {listing.name}
                   </h1>
                   <div
@@ -205,9 +235,10 @@ const Listing = () => {
 
           
           <div className="flex flex-col sm:flex-row justify-center items-center w-full bg-gray-200 py-28 gap-6 ">
-            <div className="flex flex-col justify-start items-start w-full sm:w-1/3 px-20 sm:pl-20 sm:pr-0 lg:pl-36  lg:pr-20 gap-4">
-                  <h2 className=" text-blue-800 font-bold text-3xl sm:text-2xl lg:text-3xl">Explore</h2>
-                  <h1 className=" text-slate-500 font-semibold text-xl sm:text-2l lg:text-3xl ">{listing.name}</h1>
+            <div className="flex flex-col justify-start items-start w-full sm:w-1/3 px-20 sm:pl-10 sm:pr-0 lg:pl-20 lg:pr-10 gap-2">
+                  <p className=" font-bold text-green-600 text-sm">Explore</p>
+                  <h2 className=" text-blue-800 font-bold text-3xl sm:text-2xl lg:text-4xl">Gallery</h2>
+                  <h1 className=" text-slate-500 font-semibold text-xl sm:text-2l lg:text-2xl ">{listing.name}</h1>
                   {/* <button className="font-bold bg-blue-700 text-white text-sm py-3 px-10 rounded-lg mt-5 shadow-md"  >Contact Agent</button> */}
 
             </div>
@@ -231,6 +262,41 @@ const Listing = () => {
 
           
     </div>
+      {/* gallery section end */}
+
+      {/* contact landlord section start */}
+
+      { owner && (
+        <div className="flex  justify-center items-center w-full py-32 gap-6 ">
+        <div className="flex flex-col sm:flex-row justify-center items-start w-4/5 lg:w-4/5 gap-10 ">
+
+        
+        <div className="flex flex-col justify-start items-start w-full sm:w-2/4 gap-2  ">
+          <p className=" font-bold text-green-600 text-sm">realestate</p>
+          <h1 className=" font-bold text-blue-800 text-4xl ">Owner Info</h1>  
+          <div className="flex justify-start items-center w-full gap-3 pt-5">
+            <img className=" rounded-full " src={owner.avatar} alt="" />
+            <h1 className=" text-slate-500 font-semibold text-xl sm:text-2l lg:text-2xl ">{owner.username}</h1>
+          </div>
+          
+
+        </div>
+        <div className="flex flex-col justify-center items-center sm:items-start w-full sm:w-2/4 gap-4">
+         <div className="flex flex-col justify-start items-start w-full gap-2 ">
+         <p className=" flex justify-center items-center font-bold text-green-600 text-sm gap-1">email</p>
+        <h1 className=" font-bold text-blue-800 capitalize text-3xl">Contact Owner</h1>
+        
+      
+          </div> 
+        
+        <input className=" w-full max-w-lg rounded-lg border border-slate-300 focus:outline-none p-4 font-semibold shadow-md" type="text" placeholder="Subjecct" value={subject} onChange={onChangeSubject} />
+        <textarea className=" w-full max-w-lg rounded-lg border border-slate-300 focus:outline-none p-4 font-semibold shadow-md" placeholder="message" name="" id="" cols="30" rows="5" value={message} onChange={onChangeMessage} ></textarea>
+        <Link to={`mailto:${owner.email}?subject=${subject}&body=${message}`} className="w-full sm:max-w-lg text-center bg-blue-800 hover:bg-blue-900 text-white p-2 rounded-lg">Contact</Link>
+        </div>
+        </div>
+        </div>
+      )
+      }
           </>
           )}
    
