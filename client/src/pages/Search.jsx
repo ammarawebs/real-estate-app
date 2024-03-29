@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
+import axios from 'axios';
+
 
 export default function Search() {
   const navigate = useNavigate();
@@ -53,16 +55,22 @@ export default function Search() {
       setShowMore(false);
       const searchQuery = urlParams.toString();
       const apiUrl = `https://real-estate-api-tau.vercel.app/api/listing/get?${searchQuery}`;
-      const res = await fetch(apiUrl);
-      if (data.length > 8) {
-        setShowMore(true);
-      } else {
-        setShowMore(false);
+      
+      try {
+        const response = await axios.get(apiUrl);
+        const data = response.data;
+        if (data.length > 8) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
+        setListings(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching listings:', error);
+        setLoading(false);
       }
-      setListings(data);
-      setLoading(false);
     };
-
     fetchListings();
   }, [location.search]);
 
