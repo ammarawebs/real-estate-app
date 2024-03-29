@@ -22,7 +22,7 @@ const app = express();
 
 // CORS middleware setup
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://real-estate-api-tau.vercel.app',
   credentials: true, // include credentials in CORS requests (cookies, authorization headers)
 }));
 
