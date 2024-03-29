@@ -21,11 +21,7 @@ mongoose.connect(process.env.MONGO)
 const app = express();
 
 // CORS middleware setup
-app.use(cors({
-  origin: 'https://real-estate-app-two-gray.vercel.app', // Allow requests from this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specified HTTP methods
-  credentials: true, // Allow credentials such as cookies, authorization headers
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
