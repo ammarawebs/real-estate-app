@@ -6,6 +6,7 @@ import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import cors from 'cors'; // Import cors middleware
 dotenv.config();
 
 mongoose
@@ -20,6 +21,14 @@ mongoose
   const __dirname = path.resolve();
 
 const app = express();
+
+app.use(cors(
+  {
+    origin: 'https://real-estate-app-gamma-woad.vercel.app',
+    methods:[ "GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }
+))
 
 app.use(express.json());
 
