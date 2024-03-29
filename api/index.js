@@ -20,13 +20,6 @@ mongoose
   const __dirname = path.resolve();
 
 const app = express();
-// app.use(cors(
-//   {
-//     origin: ['https://real-estate-app-three-gamma.vercel.app/'],
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     credentials:true
-//   }
-// ))
 
 app.use(express.json());
 
