@@ -24,7 +24,7 @@ const app = express();
 
 app.use(cors(
   {
-    origin: 'https://real-estate-app-gamma-woad.vercel.app',
+    origin: 'https://real-estate-app-two-gray.vercel.app',
     methods:[ "GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }
