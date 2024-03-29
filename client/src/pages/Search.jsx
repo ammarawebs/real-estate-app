@@ -47,12 +47,12 @@ export default function Search() {
         order: orderFromUrl || 'desc',
       });
     }
-
+    // /api/listing/get?${searchQuery}
     const fetchListings = async () => {
       setLoading(true);
       setShowMore(false);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/listing/get?${searchQuery}`);
+      const res = await fetch(`https://real-estate-api-tau.vercel.app/api/listing/get?searchTerm=`);
       const data = await res.json();
       if (data.length > 8) {
         setShowMore(true);

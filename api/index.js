@@ -21,7 +21,10 @@ mongoose.connect(process.env.MONGO)
 const app = express();
 
 // CORS middleware setup
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true, // include credentials in CORS requests (cookies, authorization headers)
+}));
 
 app.use(express.json());
 app.use(cookieParser());
