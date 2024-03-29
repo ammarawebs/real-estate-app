@@ -6,8 +6,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://real-estate-api-tau.vercel.app', // Use HTTP instead of HTTPS
-        secure: false, // Disable SSL verification
+        target: 'https://real-estate-api-tau.vercel.app',
+        
       },
     },
   },

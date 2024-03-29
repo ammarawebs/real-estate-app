@@ -6,7 +6,7 @@ import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import cors from 'cors'; // Import cors middleware
+import cors from 'cors';
 dotenv.config();
 
 mongoose
@@ -22,15 +22,18 @@ mongoose
 
 const app = express();
 
-app.use(cors(
-  {
-    origin: 'https://real-estate-app-two-gray.vercel.app',
-    methods:[ "GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  }
-))
+
 
 app.use(express.json());
+
+app.use(cors(
+  {
+    origin :['https://real-estate-app-two-gray.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  }
+));
+
 
 app.use(cookieParser());
 
