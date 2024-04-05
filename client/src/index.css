@@ -4,11 +4,24 @@
 
 
 body{
-    background-color: rgb(241, 245, 241);
+    background-color: rgb(12, 12, 12);
+    font-family: "Inter Tight", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    color: white;
 }
-
-
-
 .gallery_scroll::-webkit-scrollbar{
     display: none;
 }
+
+
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: rgb(225, 225, 225); /* Change color to your desired color */
+}
+
+/* // <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 900 */
+

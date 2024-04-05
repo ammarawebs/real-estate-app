@@ -11,9 +11,11 @@ import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
 import Listing from './pages/Listing'
 import Search from './pages/Search'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const App = () => {
   return (
+    <SkeletonTheme baseColor="#202020" highlightColor="#444">
       <BrowserRouter>
         <Header/>
         <Routes>
@@ -30,6 +32,7 @@ const App = () => {
           <Route path='/sign-up' element={<SignUp/>}  />
         </Routes>
       </BrowserRouter>
+      </SkeletonTheme>
   )
 }
 
